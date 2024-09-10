@@ -1,36 +1,25 @@
-
-"""
-update this file to implement the following already declared methods:
-- add_member: Should add a member to the self._members list
-- delete_member: Should delete a member from the self._members list
-- update_member: Should update a member from the self._members list
-- get_member: Should return a member from the self._members list
-"""
-from random import randint
+from random import randint # Importa la función randint del módulo random. Esta función se utiliza para generar un número entero aleatorio dentro de un rango especificado. Aunque en el código presentado no se utiliza randint, generalmente se usaría para tareas como generar IDs aleatorios o números de la suerte.
 
 class FamilyStructure:
     def __init__(self, last_name):
         self.last_name = last_name
-
-        # example list of members
+        self._next_id = 1
         self._members = []
 
-    # read-only: Use this method to generate random members ID's when adding members into the list
-    def _generateId(self):
-        return randint(0, 99999999)
-
-    def add_member(self, member):
-        # fill this method and update the return
-        pass
-
-    def delete_member(self, id):
-        # fill this method and update the return
-        pass
+    def get_all_members(self):
+        return self._members # Devuelve la lista completa de miembros de la familia
 
     def get_member(self, id):
-        # fill this method and update the return
-        pass
+        return next((m for m in self._members if m['id'] == id), None) # Busca un miembro por su id
 
-    # this method is done, it returns a list with all the family members
-    def get_all_members(self):
-        return self._members
+    def add_member(self, member): # Agrega un nuevo miembro, asignando un id si no tiene
+        if 'id' not in member:
+            member['id'] = self._next_id
+            self._next_id += 1
+        member['last_name'] = self.last_name
+        self._members.append(member)
+
+    def delete_member(self, id): # Elimina un miembro por su id
+        initial_length = len(self._members)
+        self._members = [m for m in self._members if m['id'] != id]
+        return len(self._members) < initial_length
